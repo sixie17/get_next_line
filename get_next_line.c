@@ -26,10 +26,13 @@ char	*get_line(char *s)
 	char	*line;
 	size_t	i;
 
+	i = 0;
 	while(s[i] && s[i] != '\n')
 		i++;
+	if (s[i] == '\n')
+		i++;
 	line = (char *)ft_calloc(i + 1, sizeof(char));
-	ft_strlcpy(line, s, i);
+	ft_strlcpy(line, s, i + 1);
 	return(line);
 }
 
@@ -65,7 +68,7 @@ char	*get_next_line(int fd)
 	static char	*line;
 
 	if (BUFFER_SIZE <= 0 && read(fd, NULL, 0) < 0)
-		return (NULL);
+		return (0);
 	if (!line)
 	{
 		buff = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
