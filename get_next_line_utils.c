@@ -1,28 +1,75 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ysakine <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/10 16:21:07 by ysakine           #+#    #+#             */
-/*   Updated: 2021/11/13 02:22:50 by ysakine          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+void    ft_bzero(void *s, size_t l)
 {
-	size_t	i;
+    unsigned char *s1;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+    s1 = (unsigned char *)s;
+    while(l--)
+        s1[l] = '\0';
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+void	*ft_calloc(size_t count, size_t size)
+{
+	void			*ptr;
+
+	ptr = malloc (count * size);
+	if (!ptr)
+		return (NULL);
+	ft_bzero(ptr, size * count);
+	return (ptr);
+}
+
+char	*ft_strdup(char *s1)
+{
+	char	*str;
+	size_t	i;
+
+	str = (char *)ft_calloc(ft_strlen(s1) + 1, sizeof(char));
+	i = 0;
+	if (!str)
+		return (0);
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	return (str);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	size_t	size;
+	char	*buff;
+	size_t	i;
+	size_t	len_s1;
+	size_t	len_s2;
+
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
+	size = len_s1 + len_s2 + 1;
+	buff = ft_calloc(size, sizeof(char));
+	i = 0;
+	if (!buff)
+		return (0);
+	while (i < len_s1)
+	{
+		buff[i] = s1[i];
+		i++;
+	}
+	while (i < size - 1)
+	{
+		buff[i] = s2[i - len_s1];
+		i++;
+	}
+    free(s1);
+	s1 = NULL;
+	free(s2);
+	s2 = NULL;
+	return (buff);
+}
+
+size_t	ft_strlcpy(char *dst, char *src, size_t dstsize)
 {
 	size_t	i;
 
@@ -37,45 +84,4 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	if (dst[i])
 		dst[i] = '\0';
 	return (ft_strlen(src));
-}
-
-void	ft_bzero(char *s, size_t l)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < l)
-	{
-		s[i] = '\0';
-		i++;
-	}
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	size_t	size;
-	char	*buff;
-	size_t	i;
-	size_t	len_s1;
-	size_t	len_s2;
-
-	len_s1 = ft_strlen(s1);
-	len_s2 = ft_strlen(s2);
-	size = len_s1 + len_s2 + 1;
-	buff = malloc(size * sizeof(char) + 1);
-	i = 0;
-	if (!buff)
-		return (0);
-	ft_bzero(buff, size);
-	while (i < len_s1)
-	{
-		buff[i] = s1[i];
-		i++;
-	}
-	while (s2[i - len_s1])
-	{
-		buff[i] = s2[i - len_s1];
-		i++;
-	}
-	return (buff);
 }
